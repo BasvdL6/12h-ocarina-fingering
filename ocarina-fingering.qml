@@ -51,7 +51,7 @@ MuseScore {
 		
 		var fonts = [];
 		fonts.push(new FontObject(
-			"TwelveHOcarinaAlphabetic",
+			"Ocarina TwelveH Alpha",
 			20,
 			["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U"],
 			["Z", "Y"]
@@ -208,7 +208,7 @@ MuseScore {
 			id: txtFont
 			currentIndex: 0
 			model: ListModel { id: selFont
-				ListElement { text: "TwelveHOcarinaAlphabetic"  }
+				ListElement { text: "Ocarina TwelveH Alpha"  }
 				ListElement { text: "OcarinaT12Custom"  }
 				ListElement { text: "Open 12 Hole Ocarina 1" }
 				ListElement { text: "Open 12 Hole Ocarina 2" }
