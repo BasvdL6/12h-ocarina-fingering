@@ -6,24 +6,24 @@
 // 
 // --------------------------------------------
 
-import MuseScore 3.0
 import QtQuick 2.2
-import QtQuick.Controls 1.1
-import QtQuick.Controls.Styles 1.3
-import QtQuick.Layouts 1.1
-import QtQuick.Dialogs 1.1
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import MuseScore 3.0
+import Muse.Ui 1.0
+import Muse.UiComponents 1.0
 
 MuseScore {
 	menuPath: "Plugins.Ocarina Fingering";
 	title: "12H Ocarina Fingering";
-	version: "1.0";
+	version: "2.0";
 	description: "Add fingering for 12 hole ocarinas to the score using a dialog box.";
 	thumbnailName: "ocarina-fingering.png";
 	categoryCode: "composing-arranging-tools";
 	requiresScore: true;
 	pluginType: "dialog";
-	width:  270;
-	height: 270;
+	width:  350;
+	height: 300;
 	
 	property var xOrg: 0.65;
 	property var yOrg: 3.5;
@@ -36,7 +36,7 @@ MuseScore {
 	property var iPitch: 0; // instrument's lowest pitch
 
 	onRun: {
-		txtSize.text = fPerc;
+		txtSize.currentValue = fPerc;
 	}
 	
 	function addFingerings() {
@@ -80,9 +80,9 @@ MuseScore {
 			["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A"]
 		))
 		
-		fScale = txtSize.value / 100;
-		xOff = txtXoff.value + xOrg;
-		yOff = txtYoff.value + yOrg;
+		fScale = txtSize.currentValue / 100;
+		xOff = txtXoff.currentValue + xOrg;
+		yOff = txtYoff.currentValue + yOrg;
 		
 		var startStaff;
 		var endStaff;
@@ -118,8 +118,8 @@ MuseScore {
 			octaves = 3-txtType.currentIndex;
 		}
 		iPitch = pitches[txtKey.currentIndex] + octaves*12;
-		if (!isNaN(txtCust.text)) {
-			iPitch += 1*txtCust.value;
+		if (!isNaN(txtCust.currentValue)) {
+			iPitch += 1*txtCust.currentValue;
 		}
 		
 		curScore.startCmd();
@@ -198,115 +198,146 @@ MuseScore {
 		anchors.fill: parent
 		anchors.margins: 5
 		columns: 2
-		columnSpacing: 0
-		rowSpacing: 0
-		Label {
+		columnSpacing: 10
+		rowSpacing: 2
+		StyledTextLabel {
 			id: lblFont
 			text: "Font face"
 		}
-		ComboBox {
+		StyledDropdown {
 			id: txtFont
 			currentIndex: 0
-			model: ListModel { id: selFont
-				ListElement { text: "Ocarina TwelveH Alpha"  }
-				ListElement { text: "OcarinaT12Custom"  }
-				ListElement { text: "Open 12 Hole Ocarina 1" }
-				ListElement { text: "Open 12 Hole Ocarina 2" }
-				ListElement { text: "12 hole taiwanese" }
+			width: 190
+			model: [
+				{ 'text': "Ocarina TwelveH Alpha" },
+				{ 'text': "OcarinaT12Custom" },
+				{ 'text': "Open 12 Hole Ocarina 1" },
+				{ 'text': "Open 12 Hole Ocarina 2" },
+				{ 'text': "12 hole taiwanese" }
+			]
+			onActivated: function(index, value) {
+				currentIndex = index
 			}
 		}
-		Label {
+		StyledTextLabel {
 			id: lblSize
 			text: "Font scale"
 		}
-		SpinBox {
+		IncrementalPropertyControl {
 			id: txtSize
 			decimals: 2
-			maximumValue: 10000
-			minimumValue: 1
-			stepSize: 1
-			value: 100
-			suffix: "%"
+			maxValue: 10000
+			minValue: 1
+			step: 1
+			currentValue: 100
+			implicitWidth: 80
+			onValueEdited: function(newValue) {
+				currentValue = newValue
+			}
 		}
-		Label {
+		StyledTextLabel {
 			id: lblXoff
 			text: "X-Offset"
 		}
-		SpinBox {
+		IncrementalPropertyControl {
 			id: txtXoff
 			decimals: 2
-			maximumValue: 10
-			minimumValue: -10
-			stepSize: 0.5
+			maxValue: 10
+			minValue: -10
+			step: 0.5
+			currentValue: 0
+			implicitWidth: 80
+			onValueEdited: function(newValue) {
+				currentValue = newValue
+			}
 		}
-		Label {
+		StyledTextLabel {
 			id: lblYoff
 			text: "Y-Offset"
 		}
-		SpinBox {
+		IncrementalPropertyControl {
 			id: txtYoff
 			decimals: 2
-			maximumValue: 10
-			minimumValue: -10
-			stepSize: 0.5
+			maxValue: 10
+			minValue: -10
+			step: 0.5
+			currentValue: 0
+			implicitWidth: 80
+			onValueEdited: function(newValue) {
+				currentValue = newValue
+			}
 		}
-		Label {
+		StyledTextLabel {
 			id: lblType
 			text: "Type of ocarina"
 		}
-		ComboBox {
+		StyledDropdown {
 			id: txtType
 			currentIndex: 1
-			model: ListModel { id: selType
-				ListElement { text: "Soprano" }
-				ListElement { text: "Tenor/alto" }
-				ListElement { text: "Bass" }
-				ListElement { text: "Contrabass" }
+			model: [
+				{ 'text': "Soprano" },
+				{ 'text': "Tenor/alto" },
+				{ 'text': "Bass" },
+				{ 'text': "Contrabass" }
+			]
+			onActivated: function(index, value) {
+				currentIndex = index
 			}
 		}
-		Label {
+		StyledTextLabel {
 			id: lblKey
 			text: "Key of ocarina"
 		}
-		ComboBox {
+		StyledDropdown {
 			id: txtKey
 			currentIndex: 0
-			model: ListModel { id: selKey
-				ListElement { text: "C" }
-				ListElement { text: "G" }
-				ListElement { text: "F" }
-				ListElement { text: "D" }
-				ListElement { text: "Bb" }
-				ListElement { text: "A" }
+			model: [
+				{ 'text': "C" },
+				{ 'text': "G" },
+				{ 'text': "F" },
+				{ 'text': "D" },
+				{ 'text': "Bb" },
+				{ 'text': "A" }
+			]
+			onActivated: function(index, value) {
+				currentIndex = index
 			}
 		}
 		CheckBox {
 			id: chkTrue
-			// CheckBox label cuts off for some reason, workaround to ensure the entire text is visible
-			text: 'Use true pitch ||||'
+			text: 'Use true pitch'
 			clip: false
 			width: 200
-			checked: false
+			checked: true
 			Layout.columnSpan: 2
 			Layout.minimumWidth: 200
 			Layout.fillWidth: true
+			onClicked: function() {
+				checked = !checked
+			}
 		}
-		Label {
+		StyledTextLabel {
 			id: lblCust
 			text: "Custom transposition"
 		}
-		SpinBox {
+		IncrementalPropertyControl {
 			id: txtCust
 			decimals: 0
-			maximumValue: 12
-			minimumValue: -12
+			maxValue: 12
+			minValue: -12
+			step: 1
+			currentValue: 0
+			implicitWidth: 80
+			onValueEdited: function(newValue) {
+				currentValue = newValue
+			}
 		}
-		Button {
+		FlatButton {
 			id: btnApply
 			text: "Apply"
 			onClicked: addFingerings()
 		}
-		Button {
+		FlatButton {
 			id: btnUndo
 			text: "Undo"
 			onClicked: {cmd("undo");}
