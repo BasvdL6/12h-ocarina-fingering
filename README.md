@@ -8,3 +8,5 @@ You can use one of a number of fonts. I have supplied my own free font Ocarina T
 - "12 hole taiwanese", source: https://theocarinanetwork.com/ray-39-s-12-hole-and-double-ac-ocarina-tab-font-fo-t23228.html
 
 Support for commercial fonts from Songbird and Whirlwindpress might be added later.
+
+There are two versions supplied: The original one for MuseScore 4 before 4.4 (labeled as old), and a new version for MuseScore 4.4
